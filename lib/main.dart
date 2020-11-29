@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'project.dart';
 import 'style.dart';
+import 'socialButton.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,14 +23,22 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _alignProjectRight = true;
   final _scrollController = ScrollController();
   final double _scrollHeightProjects = 1375;
-  final double _scrollHeightContact = 1375;
+  //final double _scrollHeightContact = 1375;
+  final List<Project> _projects = [
+    Project('hello', lorem, Image.asset('images/github.png')),
+    Project('hello', lorem, Image.asset('images/github.png')),
+    Project('hello', lorem, Image.asset('images/github.png')),
+    Project('hello', lorem, Image.asset('images/github.png'))
+  ];
 
   void scrollTo(double height) {
     _scrollController.animateTo(height, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
@@ -68,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
+            //Hero section
             Container(
                 margin: EdgeInsets.fromLTRB(200, 200, 200, 200),
                 height: screen.height * .75,
@@ -87,60 +98,52 @@ class _MyHomePageState extends State<MyHomePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
+                            Expanded(
                               flex: 3,
-                              fit: FlexFit.loose,
-                              child: Expanded(
-                                flex: 3,
-                                child: Container(
-                                  child: Stack(
-                                    children: [
-                                      Transform.rotate(
-                                        angle: 1,
-                                        child: Text(
-                                          '01010011 01100001\n01101011 01100001\n01110010 01101001\n00100000 01000101\n01101011 01110001\n01110110 01101001\n01110011 01110100',
-                                          style: fadeText,
+                              child: Container(
+                                child: Stack(
+                                  children: [
+                                    Transform.rotate(
+                                      angle: 1,
+                                      child: Text(
+                                        '01010011 01100001\n01101011 01100001\n01110010 01101001\n00100000 01000101\n01101011 01110001\n01110110 01101001\n01110011 01110100',
+                                        style: fadeText,
+                                      ),
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                                          child: SelectableText(
+                                            "Sakari Ekqvist",
+                                            style: headerText
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-                                            child: SelectableText(
-                                              "Sakari Ekqvist",
-                                              style: TextStyle(
-                                                  fontSize: 48,
-                                                  decoration: TextDecoration.underline,
-                                                  color: Colors.white,
-                                                  fontFamily: 'RobotoMono'),
-                                            ),
-                                          ),
-                                          Padding(
-                                              padding: EdgeInsets.all(12),
-                                              child: Stack(
-                                                children: [
-                                                  Container(
-                                                    height: 48,
-                                                  ),
-                                                  SocialButton(
-                                                      imageName: 'images/github.png', link: 'github account page'),
-                                                  Padding(
-                                                    padding: const EdgeInsets.fromLTRB(52, 0, 0, 0),
-                                                    child: SocialButton(
-                                                        imageName: 'images/linkedin.png', link: 'linkedin page'),
-                                                  ),
-                                                ],
-                                              )),
-                                          SelectableText(
-                                            "- Programmer\n- Unity\n- Flutter",
-                                            style: blueText,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        Padding(
+                                            padding: EdgeInsets.all(12),
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  height: 48,
+                                                ),
+                                                SocialButton(
+                                                    imageName: 'images/github.png', link: 'github account page'),
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(52, 0, 0, 0),
+                                                  child: SocialButton(
+                                                      imageName: 'images/linkedin.png', link: 'linkedin page'),
+                                                ),
+                                              ],
+                                            )),
+                                        SelectableText(
+                                          "- Programmer\n- Unity\n- Flutter",
+                                          style: blueText,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -173,66 +176,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                 )),
-            Container(color: Colors.blue, margin: EdgeInsets.all(25), height: 500, child: Text("Hello")),
-            Container(color: Colors.blue, margin: EdgeInsets.all(25), height: 500, child: Text("Hello")),
-            Container(color: Colors.blue, margin: EdgeInsets.all(25), height: 500, child: Text("Hello")),
-            Container(color: Colors.blue, margin: EdgeInsets.all(25), height: 500, child: Text("Hello")),
-            Container(color: Colors.blue, margin: EdgeInsets.all(25), height: 500, child: Text("Hello")),
-            Container(color: Colors.blue, margin: EdgeInsets.all(25), height: 500, child: Text("Hello")),
-            Container(color: Colors.blue, margin: EdgeInsets.all(25), height: 500, child: Text("Hello")),
+            Column(
+              children: _projects.map((e) {
+                _alignProjectRight = !_alignProjectRight;
+                return ProjectCard(project: e, alignRight: _alignProjectRight,);
+              }).toList(),
+            ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class SocialButton extends StatefulWidget {
-  final imageName;
-  final link;
-
-  const SocialButton({
-    Key key,
-    @required this.imageName,
-    @required this.link,
-  }) : super(key: key);
-
-  @override
-  _SocialButtonState createState() => _SocialButtonState();
-}
-
-class _SocialButtonState extends State<SocialButton> {
-  double _size = 24;
-  double _margins = 12;
-
-  @override
-  void setState(fn) {
-    super.setState(fn);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => print('Open ${widget.link}'),
-      onHover: (value) {
-        if (value){
-          _size = 48;
-          _margins = 0;
-        }
-        else{
-          _size = 24;
-          _margins = 12;
-        }
-
-        print(value);
-        setState(() {});
-      },
-      child: Container(
-          margin: EdgeInsets.fromLTRB(_margins, _margins, 0, 0),
-          color: Colors.transparent,
-          width: _size,
-          height: _size,
-          child: Image.asset(widget.imageName)),
     );
   }
 }
